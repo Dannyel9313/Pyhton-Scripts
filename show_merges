@@ -1,0 +1,17 @@
+import networkx as nx
+import matplotlib.pyplot as plt
+import subprocess
+
+output = subprocess.check_output(['git', 'log', '--merges', '--pretty=%P'])
+
+G = nx.DiGraph()
+for line in output.decode('utf-8').split('\n'):
+    if line:
+        parents = line.split()
+        child = parents[0]
+        for parent in parents[1:]:
+            G.add_edge(parent, child)
+
+pos = nx.spring_layout(G)
+nx.draw(G, pos, with_labels=True)
+plt.show()
