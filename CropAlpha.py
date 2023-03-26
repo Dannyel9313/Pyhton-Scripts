@@ -40,7 +40,7 @@ def make_cropped_directory(path):
     else:
         print ("Successfully created the directory %s " % path)
 
-def crop(image_name,output_name,img_count,current_img):
+def crop(image_name,output_name,img_count,current_img,image_format):
     image = Image.open(image_name)
     origin_width,origin_height = image.size
     np_array = np.array(image)
@@ -65,7 +65,7 @@ def crop(image_name,output_name,img_count,current_img):
         new_width, new_height = image.size
         element_key = list_args[1] + "_" + element_count(img_count, current_img) + "_ELEMENT"
         write_new_coords(element_key,y0, x0, new_width, new_height)
-        image.save(output_name+".png")
+        image.save(output_name+".png",format=image_format)
 
 def progress(count, total, status=''):
     bar_len = 60
@@ -92,7 +92,7 @@ count = 0
 for filename in sorted(glob.glob(files)):
     base=os.path.basename(filename)
     output_name = filename[:filename.find(base)] + "cropped_images" + "/" + base.split('.')[0]
-    crop(filename,output_name,file_count, count)
+    crop(filename,output_name,file_count, count, image_format)
     count+=1
     progress(count,file_count)
     
